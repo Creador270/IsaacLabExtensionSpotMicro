@@ -1,4 +1,4 @@
-# Template for Isaac Lab Projects
+# Isaac Lab Project SpotMicro
 
 [![IsaacSim](https://img.shields.io/badge/IsaacSim-4.2.0-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
 [![Isaac Lab](https://img.shields.io/badge/IsaacLab-1.2.0-silver)](https://isaac-sim.github.io/IsaacLab)
@@ -10,14 +10,16 @@
 
 ## Overview
 
-This repository serves as a template for building projects or extensions based on Isaac Lab. It allows you to develop in an isolated environment, outside of the core Isaac Lab repository.
+In this proyect I include the Opensource Quadruped Robot SpotMicro in IsaacLab to simulate the robot and train amodel to teach the robot to walk witout encoders only using a IMU to have fetback I always wanet to make a control robot over a RL model.
 
-**Key Features:**
+**Advantages:**
 
-- `Isolation` Work outside the core Isaac Lab repository, ensuring that your development efforts remain self-contained.
-- `Flexibility` This template is set up to allow your code to be run as an extension in Omniverse.
+- `It's cheap` you dont have to buy each 12 encoders.
 
-**Keywords:** extension, template, isaaclab
+**Keywords:** extension, template, isaaclab, SpotMicro
+
+## Usage 
+At the moment is not finish im having issues with the USD of the model for any reason the robot it gets crazy wen I try to set a position to the joints I konw that part of it it's because of the DCMotorCFg
 
 ## Installation
 
@@ -33,19 +35,19 @@ git clone https://github.com/isaac-sim/IsaacLabExtensionTemplate.git
 git clone git@github.com:isaac-sim/IsaacLabExtensionTemplate.git
 ```
 
-- Throughout the repository, the name `ext_template` only serves as an example and we provide a script to rename all the references to it automatically:
+- Throughout the repository, the name `MicroSpot_implementation` only serves as an example and we provide a script to rename all the references to it automatically:
 
 ```bash
 # Enter the repository
 cd IsaacLabExtensionTemplate
-# Rename all occurrences of ext_template (in files/directories) to your_fancy_extension_name
+# Rename all occurrences of MicroSpot_implementation (in files/directories) to your_fancy_extension_name
 python scripts/rename_template.py your_fancy_extension_name
 ```
 
 - Using a python interpreter that has Isaac Lab installed, install the library
 
 ```bash
-python -m pip install -e exts/ext_template
+python -m pip install -e exts/MicroSpot_implementation
 ```
 
 - Verify that the extension is correctly installed by running the following command:
@@ -64,7 +66,7 @@ If everything executes correctly, it should create a file .python.env in the `.v
 
 ### Setup as Omniverse Extension (Optional)
 
-We provide an example UI extension that will load upon enabling your extension defined in `exts/ext_template/ext_template/ui_extension_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
+We provide an example UI extension that will load upon enabling your extension defined in `exts/MicroSpot_implementation/MicroSpot_implementation/ui_extension_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
 
 To enable your extension, follow these steps:
 
@@ -103,7 +105,7 @@ In some VsCode versions, the indexing of part of the extensions is missing. In t
 ```json
 {
     "python.analysis.extraPaths": [
-        "<path-to-ext-repo>/exts/ext_template"
+        "<path-to-ext-repo>/exts/MicroSpot_implementation"
     ]
 }
 ```
