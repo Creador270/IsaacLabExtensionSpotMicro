@@ -1,4 +1,4 @@
-# Template for Isaac Lab Projects
+# Isaac Lab Project SpotMicro
 
 [![IsaacSim](https://img.shields.io/badge/IsaacSim-4.2.0-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
 [![Isaac Lab](https://img.shields.io/badge/IsaacLab-1.2.0-silver)](https://isaac-sim.github.io/IsaacLab)
@@ -10,14 +10,16 @@
 
 ## Overview
 
-This repository serves as a template for building projects or extensions based on Isaac Lab. It allows you to develop in an isolated environment, outside of the core Isaac Lab repository.
+In this proyect I include the Opensource Quadruped Robot SpotMicro in IsaacLab to simulate the robot and train amodel to teach the robot to walk witout encoders only using a IMU to have fetback I always wanet to make a control robot over a RL model.
 
-**Key Features:**
+**Advantages:**
 
-- `Isolation` Work outside the core Isaac Lab repository, ensuring that your development efforts remain self-contained.
-- `Flexibility` This template is set up to allow your code to be run as an extension in Omniverse.
+- `It's cheap` you dont have to buy each 12 encoders.
 
-**Keywords:** extension, template, isaaclab
+**Keywords:** extension, template, isaaclab, SpotMicro
+
+## Usage 
+At the moment is not finish im having issues with the USD of the model for any reason the robot it gets crazy wen I try to set a position to the joints I konw that part of it it's because of the DCMotorCFg
 
 ## Installation
 
