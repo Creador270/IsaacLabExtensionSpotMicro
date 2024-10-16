@@ -32,7 +32,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     root_dir_path = str(Path(__file__).resolve().parent.parent)
-    old_name = "MicroSpot_implementation"
+    old_name = "MicroSpot_Implementation"
     new_name = sys.argv[1]
 
     print(f"Warning, this script will rename all instances of '{old_name}' to '{new_name}' in {root_dir_path}.")

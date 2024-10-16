@@ -10,7 +10,7 @@
 
 ## Overview
 
-In this proyect I include the Opensource Quadruped Robot SpotMicro in IsaacLab to simulate the robot and train amodel to teach the robot to walk witout encoders only using a IMU to have fetback I always wanet to make a control robot over a RL model.
+In this proyect I include the Opensource Quadruped Robot SpotMicro in IsaacLab to simulate the robot and train amodel to teach the robot to walk witout encoders only using a IMU to have fetback I always wanted to make a control robot over a RL model.
 
 **Advantages:**
 
