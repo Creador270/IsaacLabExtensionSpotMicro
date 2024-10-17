@@ -18,7 +18,7 @@ In this proyect I include the Opensource Quadruped Robot SpotMicro in IsaacLab t
 
 **Keywords:** extension, template, isaaclab, SpotMicro
 
-## Usage 
+## Usage
 At the moment is not finish im having issues with the USD of the model for any reason the robot it gets crazy wen I try to set a position to the joints I konw that part of it it's because of the DCMotorCFg
 
 ## Installation

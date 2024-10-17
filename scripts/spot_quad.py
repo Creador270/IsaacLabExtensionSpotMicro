@@ -16,9 +16,11 @@ This script demonstrates different legged robots.
 """Launch Isaac Sim Simulator first."""
 
 import argparse
-import time
 
 from omni.isaac.lab.app import AppLauncher
+
+# import time
+
 
 # add argparse arguments
 parser = argparse.ArgumentParser(description="This script demonstrates the SpotMicro.")
@@ -41,7 +43,8 @@ import omni.isaac.core.utils.prims as prim_utils
 
 import omni.isaac.lab.sim as sim_utils
 from omni.isaac.lab.assets import Articulation
-from omni.isaac.lab.assets.articulation import ArticulationCfg
+
+# from omni.isaac.lab.assets.articulation import ArticulationCfg
 
 ##
 # Pre-defined configs
@@ -95,14 +98,17 @@ def design_scene() -> tuple[dict, list[list[float]]]:
     prim_utils.create_prim("/World/Origin2", "Xform", translation=origins[1])
     print("[INFO]: ************ROBOT DCMotorCfg Untree A1************")
     print("[INFO]: effort_limit: ", UNITREE_A1_CFG.actuators["base_legs"].effort_limit)
-    print("[INFO]: saturation_effort: ", UNITREE_A1_CFG.actuators["base_legs"].saturation_effort)
+    print(
+        "[INFO]: saturation_effort: ",
+        UNITREE_A1_CFG.actuators["base_legs"].saturation_effort,
+    )
     print("[INFO]: velocity_limit: ", UNITREE_A1_CFG.actuators["base_legs"].velocity_limit)
     print("[INFO]: stiffness: ", UNITREE_A1_CFG.actuators["base_legs"].stiffness)
     print("[INFO]: damping: ", UNITREE_A1_CFG.actuators["base_legs"].damping)
     print("[INFO]: friction: ", UNITREE_A1_CFG.actuators["base_legs"].friction)
     print("[INFO]: ****************************************")
     # -- Robot
-    Untree_a1 = Articulation(UNITREE_A1_CFG.replace(prim_path="/World/Origin2/Robot2"))
+    # Untree_a1 = Articulation(UNITREE_A1_CFG.replace(prim_path="/World/Origin2/Robot2"))
 
     # return the scene information
     scene_entities = {
@@ -112,7 +118,11 @@ def design_scene() -> tuple[dict, list[list[float]]]:
     return scene_entities, origins
 
 
-def run_simulator(sim: sim_utils.SimulationContext, entities: dict[str, Articulation], origins: torch.Tensor):
+def run_simulator(
+    sim: sim_utils.SimulationContext,
+    entities: dict[str, Articulation],
+    origins: torch.Tensor,
+):
     """Runs the simulation loop."""
     # Define simulation stepping
     sim_dt = sim.get_physics_dt()
@@ -136,7 +146,10 @@ def run_simulator(sim: sim_utils.SimulationContext, entities: dict[str, Articula
                 root_state[:, :3] += origins[index]
                 robot.write_root_state_to_sim(root_state)
                 # joint state
-                joint_pos, joint_vel = robot.data.default_joint_pos.clone(), robot.data.default_joint_vel.clone()
+                joint_pos, joint_vel = (
+                    robot.data.default_joint_pos.clone(),
+                    robot.data.default_joint_vel.clone(),
+                )
                 robot.write_joint_state_to_sim(joint_pos, joint_vel)
                 # reset the internal state
                 robot.reset()
