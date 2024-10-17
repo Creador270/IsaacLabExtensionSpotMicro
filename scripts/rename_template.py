@@ -44,7 +44,10 @@ if __name__ == "__main__":
             os.path.join(root_dir_path, "exts", "MicroSpot_implementation", "MicroSpot_implementation"),
             os.path.join(root_dir_path, "exts", "MicroSpot_implementation", new_name),
         )
-        os.rename(os.path.join(root_dir_path, "exts", "MicroSpot_implementation"), os.path.join(root_dir_path, "exts", new_name))
+        os.rename(
+            os.path.join(root_dir_path, "exts", "MicroSpot_implementation"),
+            os.path.join(root_dir_path, "exts", new_name),
+        )
         # rename the file contents
         rename_file_contents(root_dir_path, old_name, new_name, exclude_dirs=[".git"])
     else:

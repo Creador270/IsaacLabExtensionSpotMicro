@@ -17,6 +17,7 @@ This script demonstrates different legged robots.
 
 import argparse
 import time
+
 from omni.isaac.lab.app import AppLauncher
 
 # add argparse arguments
@@ -32,22 +33,21 @@ simulation_app = app_launcher.app
 
 """Rest everything follows."""
 
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
-import matplotlib.pyplot as plt
 
 import omni.isaac.core.utils.prims as prim_utils
 
 import omni.isaac.lab.sim as sim_utils
 from omni.isaac.lab.assets import Articulation
+from omni.isaac.lab.assets.articulation import ArticulationCfg
 
 ##
 # Pre-defined configs
 
-from omni.isaac.lab_assets.robot_spot_ean import QUAD_EAN  # isort:skip
+from robot_spot_ean import QUAD_EAN  # isort:skip
 from omni.isaac.lab_assets.unitree import UNITREE_A1_CFG  # isort:skip
-from omni.isaac.lab.assets.articulation import ArticulationCfg
-
 
 
 def define_origins(num_origins: int, spacing: float) -> list[list[float]]:
@@ -81,12 +81,12 @@ def design_scene() -> tuple[dict, list[list[float]]]:
     # Origin EAN Quadruped
     prim_utils.create_prim("/World/Origin1", "Xform", translation=origins[0])
     print("[INFO]: ************ROBOT DCMotorCfg Origin EAN ************")
-    print("[INFO]: effort_limit: ",QUAD_EAN.actuators["base_legs"].effort_limit)
-    print("[INFO]: saturation_effort: ",QUAD_EAN.actuators["base_legs"].saturation_effort)
-    print("[INFO]: velocity_limit: ",QUAD_EAN.actuators["base_legs"].velocity_limit)
-    print("[INFO]: stiffness: ",QUAD_EAN.actuators["base_legs"].stiffness)
-    print("[INFO]: damping: ",QUAD_EAN.actuators["base_legs"].damping)
-    print("[INFO]: friction: ",QUAD_EAN.actuators["base_legs"].friction)
+    print("[INFO]: effort_limit: ", QUAD_EAN.actuators["base_legs"].effort_limit)
+    print("[INFO]: saturation_effort: ", QUAD_EAN.actuators["base_legs"].saturation_effort)
+    print("[INFO]: velocity_limit: ", QUAD_EAN.actuators["base_legs"].velocity_limit)
+    print("[INFO]: stiffness: ", QUAD_EAN.actuators["base_legs"].stiffness)
+    print("[INFO]: damping: ", QUAD_EAN.actuators["base_legs"].damping)
+    print("[INFO]: friction: ", QUAD_EAN.actuators["base_legs"].friction)
     print("[INFO]: ****************************************")
     # -- Robot
     SpotMicroAI = Articulation(QUAD_EAN.replace(prim_path="/World/Origin1/Robot1"))
@@ -94,12 +94,12 @@ def design_scene() -> tuple[dict, list[list[float]]]:
     # Origin Untree Quadruped
     prim_utils.create_prim("/World/Origin2", "Xform", translation=origins[1])
     print("[INFO]: ************ROBOT DCMotorCfg Untree A1************")
-    print("[INFO]: effort_limit: ",UNITREE_A1_CFG.actuators["base_legs"].effort_limit)
-    print("[INFO]: saturation_effort: ",UNITREE_A1_CFG.actuators["base_legs"].saturation_effort)
-    print("[INFO]: velocity_limit: ",UNITREE_A1_CFG.actuators["base_legs"].velocity_limit)
-    print("[INFO]: stiffness: ",UNITREE_A1_CFG.actuators["base_legs"].stiffness)
-    print("[INFO]: damping: ",UNITREE_A1_CFG.actuators["base_legs"].damping)
-    print("[INFO]: friction: ",UNITREE_A1_CFG.actuators["base_legs"].friction)
+    print("[INFO]: effort_limit: ", UNITREE_A1_CFG.actuators["base_legs"].effort_limit)
+    print("[INFO]: saturation_effort: ", UNITREE_A1_CFG.actuators["base_legs"].saturation_effort)
+    print("[INFO]: velocity_limit: ", UNITREE_A1_CFG.actuators["base_legs"].velocity_limit)
+    print("[INFO]: stiffness: ", UNITREE_A1_CFG.actuators["base_legs"].stiffness)
+    print("[INFO]: damping: ", UNITREE_A1_CFG.actuators["base_legs"].damping)
+    print("[INFO]: friction: ", UNITREE_A1_CFG.actuators["base_legs"].friction)
     print("[INFO]: ****************************************")
     # -- Robot
     Untree_a1 = Articulation(UNITREE_A1_CFG.replace(prim_path="/World/Origin2/Robot2"))
@@ -107,7 +107,7 @@ def design_scene() -> tuple[dict, list[list[float]]]:
     # return the scene information
     scene_entities = {
         "quadruped_ean": SpotMicroAI,
-        #"unitree_a1": Untree_a1
+        # "unitree_a1": Untree_a1
     }
     return scene_entities, origins
 
@@ -119,7 +119,7 @@ def run_simulator(sim: sim_utils.SimulationContext, entities: dict[str, Articula
     sim_time = 0.0
     count = 0
     ep = 0
-    fr_art = [] #Frecuency reguistry
+    fr_art = []  # Frecuency reguistry
     # Simulate physics
     while simulation_app.is_running():
 
@@ -131,72 +131,71 @@ def run_simulator(sim: sim_utils.SimulationContext, entities: dict[str, Articula
             ep += 1
             # reset robots
             for index, robot in enumerate(entities.values()):
-                    # root state
-                    root_state = robot.data.default_root_state.clone()
-                    root_state[:, :3] += origins[index]
-                    robot.write_root_state_to_sim(root_state)
-                    # joint state
-                    joint_pos, joint_vel = robot.data.default_joint_pos.clone(), robot.data.default_joint_vel.clone()
-                    robot.write_joint_state_to_sim(joint_pos, joint_vel)
-                    # reset the internal state
-                    robot.reset()
-            print("[INFO]: Resetting robots state...Ep{}".format(ep))
+                # root state
+                root_state = robot.data.default_root_state.clone()
+                root_state[:, :3] += origins[index]
+                robot.write_root_state_to_sim(root_state)
+                # joint state
+                joint_pos, joint_vel = robot.data.default_joint_pos.clone(), robot.data.default_joint_vel.clone()
+                robot.write_joint_state_to_sim(joint_pos, joint_vel)
+                # reset the internal state
+                robot.reset()
+            print(f"[INFO]: Resetting robots state...Ep{ep}")
         # apply default actions to the quadrupedal robot
         # torch.tensor([ shoulder,  shoulder,  shoulder,  shoulder,  leg,  leg,  leg,  leg, foot, foot, foot, foot], device=sim.device)
         for robot in entities.values():
             if ep < 2:
-                    #print("[INFO]: Apend Robot joint position")
-                    fr_art.append(robot.data.joint_pos.cpu())
+                # print("[INFO]: Apend Robot joint position")
+                fr_art.append(robot.data.joint_pos.cpu())
             else:
-                #print("[INFO]: Registry: ", len(fr_art))
+                # print("[INFO]: Registry: ", len(fr_art))
                 # Graficar los datos
                 np_fr_art = np.array(fr_art)
                 plt.figure()
                 for i in range(12):
                     if i == 8:
-                        plt.plot(np_fr_art[:, :, i], label=f'Joint{i}_Target', color='red')
-                    #else:
-                        #plt.plot(np_fr_art[:,i], label=f'Joint{i}')
-                #plt.plot(np.full(len(fr_art), -0.09), label=f'Target: -0.09', color='red', linestyle='--')
-                plt.xlabel('Steps')
-                plt.ylabel('Joint Position (rad)')
-                plt.title('Joint Positions Over Steps, Data size: {}'.format(len(fr_art)))
+                        plt.plot(np_fr_art[:, :, i], label=f"Joint{i}_Target", color="red")
+                    # else:
+                    # plt.plot(np_fr_art[:,i], label=f'Joint{i}')
+                # plt.plot(np.full(len(fr_art), -0.09), label=f'Target: -0.09', color='red', linestyle='--')
+                plt.xlabel("Steps")
+                plt.ylabel("Joint Position (rad)")
+                plt.title(f"Joint Positions Over Steps, Data size: {len(fr_art)}")
                 plt.legend()
                 plt.show()
 
             if count >= 150:
-                #print("[INFO]: Step count: ", count)
+                # print("[INFO]: Step count: ", count)
                 # generate random joint positions
-                #joint_pos_target = robot.data.joint_pos.cpu()[0][5] + torch.tensor([0.1], device=sim.device)
-                #joint_pos_target = robot.data.joint_pos.cpu()[0][4:8] + torch.randn_like(robot.data.default_joint_pos.cpu()[0][4:8]) * 0.1
-                #joint_pos_target = joint_pos_target.to(sim.device)
+                # joint_pos_target = robot.data.joint_pos.cpu()[0][5] + torch.tensor([0.1], device=sim.device)
+                # joint_pos_target = robot.data.joint_pos.cpu()[0][4:8] + torch.randn_like(robot.data.default_joint_pos.cpu()[0][4:8]) * 0.1
+                # joint_pos_target = joint_pos_target.to(sim.device)
                 joint_pos_target = robot.data.joint_pos + torch.randn_like(robot.data.default_joint_pos) * 0.1
                 joint_pos_target = joint_pos_target.cpu()[0][8:]
                 joint_pos_target = joint_pos_target.to(sim.device)
-                #joint_pos_target = torch.zeros(4, device=sim.device)
-                #leg position
+                # joint_pos_target = torch.zeros(4, device=sim.device)
+                # leg position
                 # apply action to the robot
                 robot.set_joint_position_target(joint_pos_target, joint_ids=[8, 9, 10, 11])
                 # write data to sim
                 robot.write_data_to_sim()
-                #print("[INFO]: Step count: ", count)
-                #a = torch.cat([joint_pos_target[:4], joint_pos_target[8:]])
-                #print("robotTyp: ", robot.data.joint_pos.dtype, "robotTaryp", joint_pos_target.dtype)
-                #print("robotNT: ", robot.data.joint_pos[8:])
-                #Delay to analyze the simulation
-                #print(robot.data.joint_pos[:])
-                #time.sleep(0.5)
+                # print("[INFO]: Step count: ", count)
+                # a = torch.cat([joint_pos_target[:4], joint_pos_target[8:]])
+                # print("robotTyp: ", robot.data.joint_pos.dtype, "robotTaryp", joint_pos_target.dtype)
+                # print("robotNT: ", robot.data.joint_pos[8:])
+                # Delay to analyze the simulation
+                # print(robot.data.joint_pos[:])
+                # time.sleep(0.5)
             else:
-                
-                #print("Quadruped EAN")
-                joint_pos_target = robot.data.joint_pos #+ torch.randn_like(robot.data.joint_pos) * 0.01
+
+                # print("Quadruped EAN")
+                joint_pos_target = robot.data.joint_pos  # + torch.randn_like(robot.data.joint_pos) * 0.01
                 # apply action to the robot
                 robot.set_joint_position_target(joint_pos_target)
                 # write data to sim
                 robot.write_data_to_sim()
-                #print(robot.data.joint_pos)
-            
-                
+                # print(robot.data.joint_pos)
+
         # perform step
         sim.step()
         # update sim-time
@@ -207,8 +206,8 @@ def run_simulator(sim: sim_utils.SimulationContext, entities: dict[str, Articula
         for robot in entities.values():
             robot.update(sim_dt)
 
-        #Delay to analyze the simulation
-        #time.sleep(0.01)
+        # Delay to analyze the simulation
+        # time.sleep(0.01)
 
 
 def main():
@@ -222,7 +221,7 @@ def main():
     # for r in range(2):
     #     if r == 1:
     #         scene_entities, scene_origins = design_scene(UNITREE_A1_CFG)
-            
+
     #     else:
     #         scene_entities, scene_origins = design_scene(QUAD_EAN)
     #     scene_origins = torch.tensor(scene_origins, device=sim.device)
@@ -232,9 +231,9 @@ def main():
     #     print("[INFO]: Setup complete...")
     #     # Run the simulator
     #     run_simulator(sim, scene_entities, scene_origins)
-            
+
     print("[INFO]: Simulation test complete...")
-    scene_entities, scene_origins = design_scene() #UNITREE_A1_CFG, QUAD_EAN
+    scene_entities, scene_origins = design_scene()  # UNITREE_A1_CFG, QUAD_EAN
     scene_origins = torch.tensor(scene_origins, device=sim.device)
     # Play the simulator
     sim.reset()

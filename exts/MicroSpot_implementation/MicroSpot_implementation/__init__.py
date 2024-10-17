@@ -7,6 +7,3 @@ from .tasks import *
 
 # Register UI extensions.
 from .ui_extension_example import *
-
-#Include SpotMicro
-from .robot_spot_ean import *
