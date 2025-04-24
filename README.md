@@ -30,7 +30,7 @@ At the moment is not finish im having issues with the USD of the model for any r
 - Using a python interpreter that has Isaac Lab installed, install the library
 
 ```bash
-python -m pip install -e source/ext_template
+python -m pip install -e source/MicroSpot_implementation
 ```
 
 - Verify that the extension is correctly installed by running the following command:
@@ -49,14 +49,14 @@ If everything executes correctly, it should create a file .python.env in the `.v
 
 ### Setup as Omniverse Extension (Optional)
 
-We provide an example UI extension that will load upon enabling your extension defined in `source/ext_template/ext_template/ui_extension_example.py`.
+Nvidia Omniverse provide an example UI extension that will load upon enabling your extension defined in `source/ext_template/ext_template/ui_extension_example.py`.
 
 To enable your extension, follow these steps:
 
 1. **Add the search path of your repository** to the extension manager:
     - Navigate to the extension manager using `Window` -> `Extensions`.
     - Click on the **Hamburger Icon** (☰), then go to `Settings`.
-    - In the `Extension Search Paths`, enter the absolute path to `IsaacLabExtensionTemplate/source`
+    - In the `Extension Search Paths`, enter the absolute path to `IsaacLabExtensionSpotMicro/source`
     - If not already present, in the `Extension Search Paths`, enter the path that leads to Isaac Lab's extension directory directory (`IsaacLab/source`)
     - Click on the **Hamburger Icon** (☰), then click `Refresh`.
 
@@ -140,7 +140,7 @@ This stops and removes the containers, but keeps the images.
 
 ## Code formatting
 
-We have a pre-commit template to automatically format your code.
+Nvidia have a pre-commit template to automatically format your code.
 To install pre-commit:
 
 ```bash
