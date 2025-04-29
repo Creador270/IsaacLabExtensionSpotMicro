@@ -1,25 +1,24 @@
-import omni.isaac.lab.sim as sim_utils
-from omni.isaac.lab.actuators import DCMotorCfg
-from omni.isaac.lab.assets.articulation import ArticulationCfg
 
-# from omni.isaac.lab.utils.assets import ISAACLAB_NUCLEUS_DIR
+import isaaclab.sim as sim_utils
+from isaaclab.actuators import DCMotorCfg
+from isaaclab.assets.articulation import ArticulationCfg
 
 ##
-# Configuracion
+# Configuracion SpotMicroAI
 ##
 
 # QuadrupedEAN
 QUAD_EAN = ArticulationCfg(
     spawn=sim_utils.UsdFileCfg(
         # usd_path=f"{ISAACLAB_NUCLEUS_DIR}/Robots/Unitree/A1/a1.usd",
-        usd_path="../exts/MicroSpot_implementation/assets/spotmicroaiean_inercia.usd",
+        usd_path="/home/user1/Omniverse/IsaacLabExtensionSpotMicro/exts/MicroSpot_implementation/assets/spotmicroaiean_inercia02.usd",
         rigid_props=sim_utils.RigidBodyPropertiesCfg(
-            disable_gravity=False,
+            disable_gravity=True,
             retain_accelerations=False,
             linear_damping=0.0,
             angular_damping=0.0,
             max_linear_velocity=1000.0,
-            max_angular_velocity=0.001,
+            max_angular_velocity=1000.0,
             max_depenetration_velocity=1.0,
         ),
         articulation_props=sim_utils.ArticulationRootPropertiesCfg(
@@ -28,22 +27,21 @@ QUAD_EAN = ArticulationCfg(
     ),
     init_state=ArticulationCfg.InitialStateCfg(
         # Agregar articulaciones de la unidad SpotMicroAI
-        pos=(0.0, 0.0, 0.3),
+        pos=(0.0, 0.0, 0.26),
         joint_pos={
-            ".*_left_shoulder": 0.0,  # -0.548, 0.548, - up, + down
-            ".*_right_shoulder": 0.0,  # -0.548, 0.548, - down, - up
+            ".*_shoulder": 0.0,  # -0.548, 0.548, - up, + down
             # Articulations limits
             # - 'joint_front_left_shoulder': in [-0.548, 0.548]
             # - 'joint_front_right_shoulder': in [-0.548, 0.548]
             # - 'joint_rear_left_shoulder': in [-0.548, 0.548]
             # - 'joint_rear_right_shoulder': in [-0.548, 0.548]
-            ".*_leg": -1.559,  # - Ang_speed, + Ang_speed
+            ".*_leg": 0.0,  #-1.559 - Ang_speed, + Ang_speed
             # Articulations limits
             # - 'joint_front_left_leg': in [-2.666, 1.548]
             # - 'joint_front_right_leg': in [-2.666, 1.548]
             # - 'joint_rear_left_leg': in [-2.666, 1.548]
             # - 'joint_rear_right_leg': in [-2.666, 1.548]
-            ".*_foot": 2.589,  # - Ang_speed, + Ang_speed
+            ".*_foot": 0.0,  #2.589 - Ang_speed, + Ang_speed
             # Articulations limits
             # - 'joint_front_left_foot': in [-0.100, 2.590]
             # - 'joint_front_right_foot': in [-0.100, 2.590]

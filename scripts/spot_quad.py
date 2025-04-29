@@ -17,9 +17,7 @@ This script demonstrates different legged robots.
 
 import argparse
 
-from omni.isaac.lab.app import AppLauncher
-
-# import time
+from isaaclab.app import AppLauncher
 
 
 # add argparse arguments
@@ -34,23 +32,22 @@ app_launcher = AppLauncher(args_cli)
 simulation_app = app_launcher.app
 
 """Rest everything follows."""
-
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
-import omni.isaac.core.utils.prims as prim_utils
+import isaacsim.core.utils.prims as prim_utils
 
-import omni.isaac.lab.sim as sim_utils
-from omni.isaac.lab.assets import Articulation
+import isaaclab.sim as sim_utils
+from isaaclab.assets import Articulation
 
-# from omni.isaac.lab.assets.articulation import ArticulationCfg
+# from isaaclab.assets.articulation import ArticulationCfg
 
 ##
 # Pre-defined configs
 
 from robot_spot_ean import QUAD_EAN  # isort:skip
-from omni.isaac.lab_assets.unitree import UNITREE_A1_CFG  # isort:skip
+from isaaclab_assets.robots.unitree import UNITREE_A1_CFG  # isort:skip
 
 
 def define_origins(num_origins: int, spacing: float) -> list[list[float]]:
@@ -92,7 +89,7 @@ def design_scene() -> tuple[dict, list[list[float]]]:
     print("[INFO]: friction: ", QUAD_EAN.actuators["base_legs"].friction)
     print("[INFO]: ****************************************")
     # -- Robot
-    SpotMicroAI = Articulation(QUAD_EAN.replace(prim_path="/World/Origin1/Robot1"))
+    spotMicroAI = Articulation(QUAD_EAN.replace(prim_path="/World/Origin1/Robot1"))
 
     # Origin Untree Quadruped
     prim_utils.create_prim("/World/Origin2", "Xform", translation=origins[1])
@@ -108,12 +105,12 @@ def design_scene() -> tuple[dict, list[list[float]]]:
     print("[INFO]: friction: ", UNITREE_A1_CFG.actuators["base_legs"].friction)
     print("[INFO]: ****************************************")
     # -- Robot
-    # Untree_a1 = Articulation(UNITREE_A1_CFG.replace(prim_path="/World/Origin2/Robot2"))
+    # untree_a1 = Articulation(UNITREE_A1_CFG.replace(prim_path="/World/Origin2/Robot2"))
 
     # return the scene information
     scene_entities = {
-        "quadruped_ean": SpotMicroAI,
-        # "unitree_a1": Untree_a1
+        "quadruped_ean": spotMicroAI,
+        # "unitree_a1": untree_a1
     }
     return scene_entities, origins
 
@@ -134,7 +131,7 @@ def run_simulator(
     while simulation_app.is_running():
 
         # reset
-        if count % 401 == 0:
+        if count % 601 == 0:
             # reset counters
             sim_time = 0.0
             count = 0
@@ -145,6 +142,7 @@ def run_simulator(
                 root_state = robot.data.default_root_state.clone()
                 root_state[:, :3] += origins[index]
                 robot.write_root_state_to_sim(root_state)
+                #robot.write_root_velocity_to_sim(root_state[:, 7:])
                 # joint state
                 joint_pos, joint_vel = (
                     robot.data.default_joint_pos.clone(),
@@ -157,7 +155,7 @@ def run_simulator(
         # apply default actions to the quadrupedal robot
         # torch.tensor([ shoulder,  shoulder,  shoulder,  shoulder,  leg,  leg,  leg,  leg, foot, foot, foot, foot], device=sim.device)
         for robot in entities.values():
-            if ep < 2:
+            if ep < 4:
                 # print("[INFO]: Apend Robot joint position")
                 fr_art.append(robot.data.joint_pos.cpu())
             else:
@@ -177,7 +175,7 @@ def run_simulator(
                 plt.legend()
                 plt.show()
 
-            if count >= 150:
+            if count >= 350:
                 # print("[INFO]: Step count: ", count)
                 # generate random joint positions
                 # joint_pos_target = robot.data.joint_pos.cpu()[0][5] + torch.tensor([0.1], device=sim.device)
@@ -245,7 +243,6 @@ def main():
     #     # Run the simulator
     #     run_simulator(sim, scene_entities, scene_origins)
 
-    print("[INFO]: Simulation test complete...")
     scene_entities, scene_origins = design_scene()  # UNITREE_A1_CFG, QUAD_EAN
     scene_origins = torch.tensor(scene_origins, device=sim.device)
     # Play the simulator
