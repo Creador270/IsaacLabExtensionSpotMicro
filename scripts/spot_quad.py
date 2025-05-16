@@ -131,7 +131,7 @@ def run_simulator(
     while simulation_app.is_running():
 
         # reset
-        if count % 601 == 0:
+        if count % 1001 == 0:
             # reset counters
             sim_time = 0.0
             count = 0
@@ -155,39 +155,39 @@ def run_simulator(
         # apply default actions to the quadrupedal robot
         # torch.tensor([ shoulder,  shoulder,  shoulder,  shoulder,  leg,  leg,  leg,  leg, foot, foot, foot, foot], device=sim.device)
         for robot in entities.values():
-            if ep < 4:
-                # print("[INFO]: Apend Robot joint position")
-                fr_art.append(robot.data.joint_pos.cpu())
-            else:
-                # print("[INFO]: Registry: ", len(fr_art))
-                # Graficar los datos
-                np_fr_art = np.array(fr_art)
-                plt.figure()
-                for i in range(12):
-                    if i == 8:
-                        plt.plot(np_fr_art[:, :, i], label=f"Joint{i}_Target", color="red")
-                    # else:
-                    # plt.plot(np_fr_art[:,i], label=f'Joint{i}')
-                # plt.plot(np.full(len(fr_art), -0.09), label=f'Target: -0.09', color='red', linestyle='--')
-                plt.xlabel("Steps")
-                plt.ylabel("Joint Position (rad)")
-                plt.title(f"Joint Positions Over Steps, Data size: {len(fr_art)}")
-                plt.legend()
-                plt.show()
+            # if ep < 4:
+            #     # print("[INFO]: Apend Robot joint position")
+            #     fr_art.append(robot.data.joint_pos.cpu())
+            # else:
+            #     # print("[INFO]: Registry: ", len(fr_art))
+            #     # Graficar los datos
+            #     np_fr_art = np.array(fr_art)
+            #     plt.figure()
+            #     for i in range(12):
+            #         if i == 8:
+            #             plt.plot(np_fr_art[:, :, i], label=f"Joint{i}_Target", color="red")
+            #         # else:
+            #         # plt.plot(np_fr_art[:,i], label=f'Joint{i}')
+            #     # plt.plot(np.full(len(fr_art), -0.09), label=f'Target: -0.09', color='red', linestyle='--')
+            #     plt.xlabel("Steps")
+            #     plt.ylabel("Joint Position (rad)")
+            #     plt.title(f"Joint Positions Over Steps, Data size: {len(fr_art)}")
+            #     plt.legend()
+            #     plt.show()
 
-            if count >= 350:
+            if count >= 300:
                 # print("[INFO]: Step count: ", count)
                 # generate random joint positions
                 # joint_pos_target = robot.data.joint_pos.cpu()[0][5] + torch.tensor([0.1], device=sim.device)
                 # joint_pos_target = robot.data.joint_pos.cpu()[0][4:8] + torch.randn_like(robot.data.default_joint_pos.cpu()[0][4:8]) * 0.1
                 # joint_pos_target = joint_pos_target.to(sim.device)
-                joint_pos_target = robot.data.joint_pos + torch.randn_like(robot.data.default_joint_pos) * 0.1
-                joint_pos_target = joint_pos_target.cpu()[0][8:]
-                joint_pos_target = joint_pos_target.to(sim.device)
+                joint_pos_target = robot.data.joint_pos + 0.01
+                #joint_pos_target = joint_pos_target.cpu()[0][8:]
+                #joint_pos_target = joint_pos_target.to(sim.device)
                 # joint_pos_target = torch.zeros(4, device=sim.device)
                 # leg position
                 # apply action to the robot
-                robot.set_joint_position_target(joint_pos_target, joint_ids=[8, 9, 10, 11])
+                robot.set_joint_position_target(joint_pos_target)#, joint_ids=[8, 9, 10, 11])
                 # write data to sim
                 robot.write_data_to_sim()
                 # print("[INFO]: Step count: ", count)

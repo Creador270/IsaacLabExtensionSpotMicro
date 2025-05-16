@@ -28,7 +28,7 @@
 **/.neptune/*
 docker/artifacts/
 *.tmp
-
+exts/MicroSpot_implementation/assets/SpotMicroUSD/*
 # Isaac-Sim packman
 _isaac_sim*
 _repo
