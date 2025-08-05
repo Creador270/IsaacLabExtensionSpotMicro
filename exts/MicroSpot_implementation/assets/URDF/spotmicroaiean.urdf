@@ -16,7 +16,7 @@
   <!-- Params -->
   <!-- Macros -->
   <!-- Robot Body -->
-  <link name="base_link">
+  <link name="base">
     <visual>
       <geometry>
         <mesh filename="meshes/stl_ean/STL/Base.STL" scale="0.001 0.001 0.001"/>
@@ -32,7 +32,7 @@
     </collision>
     <inertial>
       <mass value="0.94447"/>
-      <inertia ixx="0.00387805268" ixy="-0.00003434884" ixz="-0.000016961.6" iyy="0.00109473849" iyz="0.00031562911" izz="0.00409615181"/>
+      <inertia ixx="0.00387805268" ixy="-0.00003434884" ixz="-0.0000169616" iyy="0.00109473849" iyz="0.00031562911" izz="0.00409615181"/>
     </inertial>
   </link>
   <link name="rear_link">
@@ -55,7 +55,7 @@
     </inertial>
   </link>
   <joint name="base_rear" type="fixed">
-    <parent link="base_link"/>
+    <parent link="base"/>
     <child link="rear_link"/>
   </joint>
   <link name="front_link">
@@ -78,7 +78,7 @@
     </inertial>
   </link>
   <joint name="base_front" type="fixed">
-    <parent link="base_link"/>
+    <parent link="base"/>
     <child link="front_link"/>
   </joint>
   <!-- create Legs -->
@@ -101,7 +101,7 @@
       <inertia ixx="0.00003172169" ixy="-0.00000014527" ixz="0.00000432731" iyy="0.00005316718" iyz="-0.000000500" izz="0.00006588791"/>
     </inertial>
   </link>
-  <link name="front_left_leg_link">
+  <link name="front_left_toe_link_THIGH">
     <visual>
       <geometry>
         <mesh filename="meshes/stl_ean/STL/left_arm.STL" scale="0.001 0.001 0.001"/>
@@ -117,7 +117,7 @@
     </collision>
     <inertial>
       <mass value="0.1942"/>
-      <inertia ixx="0.00020999903" ixy="0.00033247456" ixz="0.0002163401" iyy="0.00136287772" iyz="0.00006388282" izz="0.00146174584"/>
+      <inertia ixx="0.00010075846" ixy="0.00001174271" ixz="0.00002227477" iyy="0.00028245225" iyz="-0.00000610061" izz="0.00027215429"/>
     </inertial>
   </link>
   <link name="front_left_foot_link">
@@ -139,7 +139,7 @@
       <inertia ixx="0.00007223092" ixy="0.00001951089" ixz="0.00001265811" iyy="0.00027840078" iyz="0.00002203829" izz="0.00028998349"/>
     </inertial>
   </link>
-  <link name="front_left_toe_link">
+  <link name="front_left_toe_link_FOOT">
     <visual>
       <geometry>
         <mesh filename="meshes/stl_ean/STL/Foot_Tip.STL" scale="0.001 0.001 0.001"/>
@@ -160,7 +160,7 @@
     </inertial>
   </link>
   <joint name="joint_front_left_shoulder" type="revolute">
-    <parent link="base_link"/>
+    <parent link="base"/>
     <child link="front_left_shoulder_link"/>
     <axis xyz="1 0 0"/>
     <origin rpy="0 0 0" xyz="-0.104 -0.038 0"/>
@@ -169,14 +169,14 @@
   </joint>
   <joint name="joint_front_left_leg" type="revolute">
     <parent link="front_left_shoulder_link"/>
-    <child link="front_left_leg_link"/>
+    <child link="front_left_toe_link_THIGH"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="0 -0.052 0"/>
     <limit effort="1000.0" lower="-2.666" upper="1.548" velocity="0.5"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <joint name="joint_front_left_foot" type="revolute">
-    <parent link="front_left_leg_link"/>
+    <parent link="front_left_toe_link_THIGH"/>
     <child link="front_left_foot_link"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="-0.01 0 -0.12"/>
@@ -185,7 +185,7 @@
   </joint>
   <joint name="joint_front_left_toe" type="fixed">
     <parent link="front_left_foot_link"/>
-    <child link="front_left_toe_link"/>
+    <child link="front_left_toe_link_FOOT"/>
     <origin xyz="0 0 -0.115"/>
   </joint>
   <link name="front_right_shoulder_link">
@@ -207,7 +207,7 @@
       <inertia ixx="0.00004878868" ixy="-0.0000003775" ixz="-0.00000017136" iyy="0.00004225848" iyz="-0.000000434" izz="0.00003791423"/>
     </inertial>
   </link>
-  <link name="front_right_leg_link">
+  <link name="front_right_toe_link_THIGH">
     <visual>
       <geometry>
         <mesh filename="meshes/stl_ean/STL/right_arm.STL" scale="0.001 0.001 0.001"/>
@@ -245,7 +245,7 @@
       <inertia ixx="0.00003908063" ixy="-0.00000081436" ixz="0.00003886203" iyy="0.0003689475" iyz="-0.00000004347" izz="0.00034737965"/>
     </inertial>
   </link>
-  <link name="front_right_toe_link">
+  <link name="front_right_toe_link_FOOT">
     <visual>
       <geometry>
         <mesh filename="meshes/stl_ean/STL/Foot_Tip.STL" scale="0.001 0.001 0.001"/>
@@ -266,7 +266,7 @@
     </inertial>
   </link>
   <joint name="joint_front_right_shoulder" type="revolute">
-    <parent link="base_link"/>
+    <parent link="base"/>
     <child link="front_right_shoulder_link"/>
     <axis xyz="1 0 0"/>
     <origin rpy="0 0 0" xyz="-0.104 0.038 0"/>
@@ -275,14 +275,14 @@
   </joint>
   <joint name="joint_front_right_leg" type="revolute">
     <parent link="front_right_shoulder_link"/>
-    <child link="front_right_leg_link"/>
+    <child link="front_right_toe_link_THIGH"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="0 0.052 0"/>
     <limit effort="1000.0" lower="-2.666" upper="1.548" velocity="0.5"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <joint name="joint_front_right_foot" type="revolute">
-    <parent link="front_right_leg_link"/>
+    <parent link="front_right_toe_link_THIGH"/>
     <child link="front_right_foot_link"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="-0.01 0 -0.12"/>
@@ -291,7 +291,7 @@
   </joint>
   <joint name="joint_front_right_toe" type="fixed">
     <parent link="front_right_foot_link"/>
-    <child link="front_right_toe_link"/>
+    <child link="front_right_toe_link_FOOT"/>
     <origin xyz="0 0 -0.115"/>
   </joint>
   <link name="rear_left_shoulder_link">
@@ -313,7 +313,7 @@
       <inertia ixx="0.00003172169" ixy="-0.00000014527" ixz="0.00000432731" iyy="0.00005316718" iyz="-0.000000500" izz="0.00006588791"/>
     </inertial>
   </link>
-  <link name="rear_left_leg_link">
+  <link name="rear_left_toe_link_THIGH">
     <visual>
       <geometry>
         <mesh filename="meshes/stl_ean/STL/left_arm.STL" scale="0.001 0.001 0.001"/>
@@ -329,7 +329,7 @@
     </collision>
     <inertial>
       <mass value="0.1942"/>
-      <inertia ixx="0.00020999903" ixy="0.00033247456" ixz="0.0002163401" iyy="0.00136287772" iyz="0.00006388282" izz="0.00146174584"/>
+      <inertia ixx="0.00010075846" ixy="0.00001174271" ixz="0.00002227477" iyy="0.00028245225" iyz="-0.00000610061" izz="0.00027215429"/>
     </inertial>
   </link>
   <link name="rear_left_foot_link">
@@ -351,7 +351,7 @@
       <inertia ixx="0.00007223092" ixy="0.00001951089" ixz="0.00001265811" iyy="0.00027840078" iyz="0.00002203829" izz="0.00028998349"/>
     </inertial>
   </link>
-  <link name="rear_left_toe_link">
+  <link name="rear_left_toe_link_FOOT">
     <visual>
       <geometry>
         <mesh filename="meshes/stl_ean/STL/Foot_Tip.STL" scale="0.001 0.001 0.001"/>
@@ -372,7 +372,7 @@
     </inertial>
   </link>
   <joint name="joint_rear_left_shoulder" type="revolute">
-    <parent link="base_link"/>
+    <parent link="base"/>
     <child link="rear_left_shoulder_link"/>
     <axis xyz="1 0 0"/>
     <origin rpy="0 0 0" xyz="0.104 -0.038 0"/>
@@ -381,14 +381,14 @@
   </joint>
   <joint name="joint_rear_left_leg" type="revolute">
     <parent link="rear_left_shoulder_link"/>
-    <child link="rear_left_leg_link"/>
+    <child link="rear_left_toe_link_THIGH"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="0 -0.052 0"/>
     <limit effort="1000.0" lower="-2.666" upper="1.548" velocity="0.5"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <joint name="joint_rear_left_foot" type="revolute">
-    <parent link="rear_left_leg_link"/>
+    <parent link="rear_left_toe_link_THIGH"/>
     <child link="rear_left_foot_link"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="-0.01 0 -0.12"/>
@@ -397,7 +397,7 @@
   </joint>
   <joint name="joint_rear_left_toe" type="fixed">
     <parent link="rear_left_foot_link"/>
-    <child link="rear_left_toe_link"/>
+    <child link="rear_left_toe_link_FOOT"/>
     <origin xyz="0 0 -0.115"/>
   </joint>
   <link name="rear_right_shoulder_link">
@@ -419,7 +419,7 @@
       <inertia ixx="0.00004878868" ixy="-0.0000003775" ixz="-0.00000017136" iyy="0.00004225848" iyz="-0.000000434" izz="0.00003791423"/>
     </inertial>
   </link>
-  <link name="rear_right_leg_link">
+  <link name="rear_right_toe_link_THIGH">
     <visual>
       <geometry>
         <mesh filename="meshes/stl_ean/STL/right_arm.STL" scale="0.001 0.001 0.001"/>
@@ -457,7 +457,7 @@
       <inertia ixx="0.00003908063" ixy="-0.00000081436" ixz="0.00003886203" iyy="0.0003689475" iyz="-0.00000004347" izz="0.00034737965"/>
     </inertial>
   </link>
-  <link name="rear_right_toe_link">
+  <link name="rear_right_toe_link_FOOT">
     <visual>
       <geometry>
         <mesh filename="meshes/stl_ean/STL/Foot_Tip.STL" scale="0.001 0.001 0.001"/>
@@ -478,7 +478,7 @@
     </inertial>
   </link>
   <joint name="joint_rear_right_shoulder" type="revolute">
-    <parent link="base_link"/>
+    <parent link="base"/>
     <child link="rear_right_shoulder_link"/>
     <axis xyz="1 0 0"/>
     <origin rpy="0 0 0" xyz="0.104 0.038 0"/>
@@ -487,14 +487,14 @@
   </joint>
   <joint name="joint_rear_right_leg" type="revolute">
     <parent link="rear_right_shoulder_link"/>
-    <child link="rear_right_leg_link"/>
+    <child link="rear_right_toe_link_THIGH"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="0 0.052 0"/>
     <limit effort="1000.0" lower="-2.666" upper="1.548" velocity="0.5"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <joint name="joint_rear_right_foot" type="revolute">
-    <parent link="rear_right_leg_link"/>
+    <parent link="rear_right_toe_link_THIGH"/>
     <child link="rear_right_foot_link"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="-0.01 0 -0.12"/>
@@ -503,7 +503,7 @@
   </joint>
   <joint name="joint_rear_right_toe" type="fixed">
     <parent link="rear_right_foot_link"/>
-    <child link="rear_right_toe_link"/>
+    <child link="rear_right_toe_link_FOOT"/>
     <origin xyz="0 0 -0.115"/>
   </joint>
 </robot>

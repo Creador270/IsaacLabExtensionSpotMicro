@@ -17,6 +17,8 @@ class SpotMicroRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
     def __post_init__(self):
         # post init of parent
         super().__post_init__()
+        # override rewards params
+        self.scene.contact_forces = None
         # switch robot to SpotMicro
         self.scene.robot = QUAD_EAN.replace(prim_path="{ENV_REGEX_NS}/Robot")
         # rewards
