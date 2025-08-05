@@ -101,7 +101,7 @@
       <inertia ixx="0.00003172169" ixy="-0.00000014527" ixz="0.00000432731" iyy="0.00005316718" iyz="-0.000000500" izz="0.00006588791"/>
     </inertial>
   </link>
-  <link name="front_left_toe_link_THIGH">
+  <link name="front_left_leg_link_THIGH">
     <visual>
       <geometry>
         <mesh filename="meshes/stl_ean/STL/left_arm.STL" scale="0.001 0.001 0.001"/>
@@ -169,14 +169,14 @@
   </joint>
   <joint name="joint_front_left_leg" type="revolute">
     <parent link="front_left_shoulder_link"/>
-    <child link="front_left_toe_link_THIGH"/>
+    <child link="front_left_leg_link_THIGH"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="0 -0.052 0"/>
     <limit effort="1000.0" lower="-2.666" upper="1.548" velocity="0.5"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <joint name="joint_front_left_foot" type="revolute">
-    <parent link="front_left_toe_link_THIGH"/>
+    <parent link="front_left_leg_link_THIGH"/>
     <child link="front_left_foot_link"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="-0.01 0 -0.12"/>
@@ -207,7 +207,7 @@
       <inertia ixx="0.00004878868" ixy="-0.0000003775" ixz="-0.00000017136" iyy="0.00004225848" iyz="-0.000000434" izz="0.00003791423"/>
     </inertial>
   </link>
-  <link name="front_right_toe_link_THIGH">
+  <link name="front_right_leg_link_THIGH">
     <visual>
       <geometry>
         <mesh filename="meshes/stl_ean/STL/right_arm.STL" scale="0.001 0.001 0.001"/>
@@ -275,14 +275,14 @@
   </joint>
   <joint name="joint_front_right_leg" type="revolute">
     <parent link="front_right_shoulder_link"/>
-    <child link="front_right_toe_link_THIGH"/>
+    <child link="front_right_leg_link_THIGH"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="0 0.052 0"/>
     <limit effort="1000.0" lower="-2.666" upper="1.548" velocity="0.5"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <joint name="joint_front_right_foot" type="revolute">
-    <parent link="front_right_toe_link_THIGH"/>
+    <parent link="front_right_leg_link_THIGH"/>
     <child link="front_right_foot_link"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="-0.01 0 -0.12"/>
@@ -313,7 +313,7 @@
       <inertia ixx="0.00003172169" ixy="-0.00000014527" ixz="0.00000432731" iyy="0.00005316718" iyz="-0.000000500" izz="0.00006588791"/>
     </inertial>
   </link>
-  <link name="rear_left_toe_link_THIGH">
+  <link name="rear_left_leg_link_THIGH">
     <visual>
       <geometry>
         <mesh filename="meshes/stl_ean/STL/left_arm.STL" scale="0.001 0.001 0.001"/>
@@ -381,14 +381,14 @@
   </joint>
   <joint name="joint_rear_left_leg" type="revolute">
     <parent link="rear_left_shoulder_link"/>
-    <child link="rear_left_toe_link_THIGH"/>
+    <child link="rear_left_leg_link_THIGH"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="0 -0.052 0"/>
     <limit effort="1000.0" lower="-2.666" upper="1.548" velocity="0.5"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <joint name="joint_rear_left_foot" type="revolute">
-    <parent link="rear_left_toe_link_THIGH"/>
+    <parent link="rear_left_leg_link_THIGH"/>
     <child link="rear_left_foot_link"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="-0.01 0 -0.12"/>
@@ -419,7 +419,7 @@
       <inertia ixx="0.00004878868" ixy="-0.0000003775" ixz="-0.00000017136" iyy="0.00004225848" iyz="-0.000000434" izz="0.00003791423"/>
     </inertial>
   </link>
-  <link name="rear_right_toe_link_THIGH">
+  <link name="rear_right_leg_link_THIGH">
     <visual>
       <geometry>
         <mesh filename="meshes/stl_ean/STL/right_arm.STL" scale="0.001 0.001 0.001"/>
@@ -487,14 +487,14 @@
   </joint>
   <joint name="joint_rear_right_leg" type="revolute">
     <parent link="rear_right_shoulder_link"/>
-    <child link="rear_right_toe_link_THIGH"/>
+    <child link="rear_right_leg_link_THIGH"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="0 0.052 0"/>
     <limit effort="1000.0" lower="-2.666" upper="1.548" velocity="0.5"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <joint name="joint_rear_right_foot" type="revolute">
-    <parent link="rear_right_toe_link_THIGH"/>
+    <parent link="rear_right_leg_link_THIGH"/>
     <child link="rear_right_foot_link"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="-0.01 0 -0.12"/>
