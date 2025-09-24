@@ -86,12 +86,12 @@ QUAD_EAN = ArticulationCfg(
         ),
         activate_contact_sensors=True,  # Add physics contact sensors
         articulation_props=sim_utils.ArticulationRootPropertiesCfg(
-            enabled_self_collisions=False, solver_position_iteration_count=4, solver_velocity_iteration_count=0
+            enabled_self_collisions=True, solver_position_iteration_count=4, solver_velocity_iteration_count=0
         ),
     ),
     init_state=ArticulationCfg.InitialStateCfg(
         # Agregar articulaciones de la unidad SpotMicroAI
-        pos=(0.0, 0.0, 0.3),
+        pos=(0.0, 0.0, 0.1),
         joint_pos={
             ".*_shoulder": 0.0,  # -0.548, 0.548, - up, + down
             # Articulations limits
@@ -118,9 +118,9 @@ QUAD_EAN = ArticulationCfg(
     actuators={
         "base_legs": DCMotorCfg(
             joint_names_expr=[".*_leg", ".*_foot", ".*_shoulder"],
-            #effort_limit=33.5,
+            effort_limit=2500.0,
             saturation_effort=625.0 / 100.0,
-            velocity_limit=1.0,
+            velocity_limit=120.0,
             stiffness=625.0 / 10.0,
             damping=0.0,
             #friction=0.0,
