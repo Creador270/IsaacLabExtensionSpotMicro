@@ -1,15 +1,21 @@
 
-import isaaclab.sim as sim_utils
-from isaaclab.actuators import DCMotorCfg
-from isaaclab.assets.articulation import ArticulationCfg
+import argparse
 
-import contextlib
+from isaaclab.app import AppLauncher
+
+# add argparse arguments
+parser = argparse.ArgumentParser(
+    description="debugging script for SpotMicro spawning."
+)
+parser.add_argument("--num_envs", type=int, default=1, help="Number of environments to spawn.")
+# append AppLauncher cli args
+AppLauncher.add_app_launcher_args(parser)
+# parse the arguments
+args_cli = parser.parse_args()
+app_launcher = AppLauncher(args_cli)
+
+#conversion
 import os
-
-import carb
-import isaacsim.core.utils.stage as stage_utils
-import omni.kit.app
-
 from isaaclab.sim.converters import UrdfConverter, UrdfConverterCfg
 from isaaclab.utils.assets import check_file_path
 from isaaclab.utils.dict import print_dict
@@ -66,11 +72,23 @@ print(f"Generated USD file: {urdf_converter.usd_path}")
 print("-" * 80)
 print("-" * 80)
 
+# launch omniverse app
+simulation_app = app_launcher.app
+
+import numpy as np
+import torch
+
+import isaaclab.sim as sim_utils
+from isaaclab.assets import AssetBaseCfg
+from isaaclab.actuators import DCMotorCfg
+from isaaclab.assets.articulation import ArticulationCfg
+from isaaclab.scene import InteractiveScene, InteractiveSceneCfg
+
 ##
-# Configuracion SpotMicroAI
+# Configurate SpotMicroAI
 ##
 
-# QuadrupedEAN
+# Quadruped
 QUAD_EAN = ArticulationCfg(
     spawn=sim_utils.UsdFileCfg(
         # usd_path=f"{ISAACLAB_NUCLEUS_DIR}/Robots/Unitree/A1/a1.usd",
@@ -78,10 +96,10 @@ QUAD_EAN = ArticulationCfg(
         rigid_props=sim_utils.RigidBodyPropertiesCfg(
             disable_gravity=False,
             retain_accelerations=False,
-            linear_damping=0.0,
-            angular_damping=0.0,
-            max_linear_velocity=1000.0,
-            max_angular_velocity=1000.0,
+            #linear_damping=0.0,
+            #angular_damping=0.0,
+            #max_linear_velocity=1000.0,
+            #max_angular_velocity=1000.0,
             max_depenetration_velocity=1.0,
         ),
         activate_contact_sensors=True,  # Add physics contact sensors
@@ -116,26 +134,111 @@ QUAD_EAN = ArticulationCfg(
     ),
     soft_joint_pos_limit_factor=0.9,
     actuators={
-        "base_legs": DCMotorCfg(
-            joint_names_expr=[".*_leg", ".*_foot", ".*_shoulder"],
-            effort_limit=2500.0,
-            saturation_effort=625.0 / 100.0,
-            velocity_limit=120.0,
-            stiffness=625.0 / 10.0,
-            damping=0.0,
-            #friction=0.0,
-            # effort_limit=33.0,
-            # saturation_effort=33.5,
-            # velocity_limit=21.0,
-            # stiffness=25.0,
-            # damping=0.5,
-            # friction=0.0,
-            # effort_limit=21.0,
-            # saturation_effort=20.0,
-            # velocity_limit=6.98,
-            # stiffness=25.0,
-            # damping=0.5,
-            # friction=0.0,
+        "shoulders": DCMotorCfg(
+            joint_names_expr=[".*_shoulder"],
+            effort_limit_sim=2500.0,
+            velocity_limit_sim=120.0,
+            stiffness=10000.0,
+            damping=100.0,
         ),
+        "legs": DCMotorCfg(
+            joint_names_expr=[".*_leg"],
+            effort_limit_sim=2500.0,
+            velocity_limit_sim=120.0,
+            stiffness=10000.0,
+            damping=100.0,
+        ),
+        "foots": DCMotorCfg(
+            joint_names_expr=[".*_foot"],
+            effort_limit_sim=2500.0,
+            velocity_limit_sim=120.0,
+            stiffness=10000.0,
+            damping=100.0,
+        )
     },
 )
+
+class SpawnSpotMicroAI(InteractiveSceneCfg):
+    "sample scene"
+
+    # simple ground plane
+    ground = AssetBaseCfg(prim_path="/World/defaultGroundPlane", spawn=sim_utils.GroundPlaneCfg())
+
+    # ligths
+    dome_light = AssetBaseCfg(
+        prim_path="/World/Light",
+        spawn=sim_utils.DomeLightCfg(
+            intensity=3000.0,
+            color=(0.75, 0.75, 0.75),
+        ),
+    )
+
+    # robot
+    spotmicroaiean = QUAD_EAN.replace(prim_path="{ENV_REGEX_NS}/SpotMicroAI")
+
+def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveSceneCfg):
+    sim_dt = sim.get_physics_dt()
+    sim_time = 0.0
+    count = 0
+
+    while simulation_app.is_running():
+        # reset
+        if count % 1000 = 0:
+            # reset counters
+            count = 0
+            # reset the scene entities to the initial positions offset by the environment origins
+            root_spotmicroaiean_state = scene["spotmicroaiean"].data.default_root_state.clone()
+            root_spotmicroaiean_state[:, :3] += scene.env_origins
+            
+            # copy the default root state to the sim for the SpotMicroAI orientation and velocity
+            scene["spotmicroaiean"].write_root_pose_to_sim(root_spotmicroaiean_state[:, :7])
+            scene["spotmicroaiean"].write_root_velocity_to_sim(root_spotmicroaiean_state[:, 7:])
+           
+           # copy the default joint states to the sim
+           joint_pos, joint_vel = (
+                   scene["spotmicroaiean"].data.default_joint_pos.clone(),
+                   scene["spotmicroaiean"].data.default_joint_vel.clone()
+           )
+           scene["spotmicroaiean"].write_joint_state_to_sim(joint_pos, joint_vel)
+
+           # clear internal buffers
+           scene.reset()
+           print("[INFO]: Reseting SpotMicroAI state")
+
+        # realize random joint targets after 300 steps
+        if count >= 300:
+            #print("SpotMicroAI joint positions:", scene["spotmicroaiean"].data.joint_pos)
+
+            # apply random joint position targets
+            joint_pos_target = scene["spotmicroaiean"].data.default_joint_pos + torch.randn_like(scene["spotmicroaiean"].data.default_joint_pos) * 0.01
+        else:
+            joint_pos_target = scene["spotmicroaiean"].data.joint_pos
+
+        # set and write joint position targets
+        scene["spotmicroaiean"].set_joint_position_target(joint_pos_target)
+        scene.write_data_to_sim()
+
+        sim.step()
+        sim_time += sim_dt
+        count += 1
+        scene.update(sim_dt)
+
+def main():
+    """Main function to debug USD spawning"""
+    # Initialize the simulation context
+    sim_cfg = sim_utils.SimulationCfg(device=args_cli.device)
+    sim = sim_utils.SimulationContext(sim_cfg)
+    # Set main camera
+    sim.set_camera_view([3.5, 0.0, 3.2], [0.0, 0.0, 0.5])
+    # design scene
+    scene_cfg = SpawnSpotMicroAI(args_cli.num_envs, env_spacing=2.0)
+    scene = InteractiveScene(scene_cfg)
+    # Play the simulator
+    sim.reset()
+    print("[INFO]: Setup complete")
+    # Run the simulator
+    run_simulator(sim, scene)
+
+if __name__ == "__main__":
+    main()
+    simulation_app.close()
