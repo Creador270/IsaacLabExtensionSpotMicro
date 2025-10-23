@@ -13,22 +13,37 @@
             "console": "integratedTerminal",
         },
         {
-            "name": "Python: Train Environment",
+            "name": "Python: Train Template-Isaaclabextensionspotmicro-Direct-v0 with rsl_rl (PPO)",
             "type": "debugpy",
             "request": "launch",
-            "args" : ["--task", "Template-Isaac-Velocity-Flat-Anymal-D-v0", "--num_envs", "4096", "--headless"],
+            "args" : ["--task", "Template-Isaaclabextensionspotmicro-Direct-v0", "--num_envs", "4096", "--headless"],
             "program": "${workspaceFolder}/scripts/rsl_rl/train.py",
             "console": "integratedTerminal",
         },
         {
-            "name": "Python: Play Environment",
+            "name": "Python: Play Template-Isaaclabextensionspotmicro-Direct-v0 with rsl_rl (PPO)",
             "type": "debugpy",
             "request": "launch",
-            "args" : ["--task", "Template-Isaac-Velocity-Flat-Anymal-D-Play-v0", "--num_envs", "32"],
+            "args" : ["--task", "Template-Isaaclabextensionspotmicro-Direct-v0", "--num_envs", "32"],
             "program": "${workspaceFolder}/scripts/rsl_rl/play.py",
             "console": "integratedTerminal",
         },
-
+        {
+            "name": "Python: Train Template-Isaaclabextensionspotmicro-v0 with rsl_rl (PPO)",
+            "type": "debugpy",
+            "request": "launch",
+            "args" : ["--task", "Template-Isaaclabextensionspotmicro-v0", "--num_envs", "4096", "--headless"],
+            "program": "${workspaceFolder}/scripts/rsl_rl/train.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "Python: Play Template-Isaaclabextensionspotmicro-v0 with rsl_rl (PPO)",
+            "type": "debugpy",
+            "request": "launch",
+            "args" : ["--task", "Template-Isaaclabextensionspotmicro-v0", "--num_envs", "32"],
+            "program": "${workspaceFolder}/scripts/rsl_rl/play.py",
+            "console": "integratedTerminal",
+        },
         // For script execution inside a Docker
         {
             "name": "Docker: Current File",
@@ -41,26 +56,48 @@
             }
         },
         {
-            "name": "Docker: Train Environment",
+            "name": "Docker: Train Template-Isaaclabextensionspotmicro-Direct-v0 with rsl_rl (PPO)",
             "type": "debugpy",
             "request": "launch",
-            "args" : ["--task", "Template-Isaac-Velocity-Flat-Anymal-D-v0", "--num_envs", "4096", "--headless"],
+            "args" : ["--task", "Template-Isaaclabextensionspotmicro-Direct-v0", "--num_envs", "4096", "--headless"],
             "program": "${workspaceFolder}/scripts/rsl_rl/train.py",
             "console": "integratedTerminal",
             "env": {
                 "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}"
-            }
+            },
         },
         {
-            "name": "Docker: Play Environment",
+            "name": "Docker: Play Template-Isaaclabextensionspotmicro-Direct-v0 with rsl_rl (PPO)",
             "type": "debugpy",
             "request": "launch",
-            "args" : ["--task", "Template-Isaac-Velocity-Flat-Anymal-D-Play-v0", "--num_envs", "32"],
+            "args" : ["--task", "Template-Isaaclabextensionspotmicro-Direct-v0", "--num_envs", "32"],
             "program": "${workspaceFolder}/scripts/rsl_rl/play.py",
             "console": "integratedTerminal",
             "env": {
                 "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}"
-            }
-        }
+            },
+        },
+        {
+            "name": "Docker: Train Template-Isaaclabextensionspotmicro-v0 with rsl_rl (PPO)",
+            "type": "debugpy",
+            "request": "launch",
+            "args" : ["--task", "Template-Isaaclabextensionspotmicro-v0", "--num_envs", "4096", "--headless"],
+            "program": "${workspaceFolder}/scripts/rsl_rl/train.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}"
+            },
+        },
+        {
+            "name": "Docker: Play Template-Isaaclabextensionspotmicro-v0 with rsl_rl (PPO)",
+            "type": "debugpy",
+            "request": "launch",
+            "args" : ["--task", "Template-Isaaclabextensionspotmicro-v0", "--num_envs", "32"],
+            "program": "${workspaceFolder}/scripts/rsl_rl/play.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}"
+            },
+        },
     ]
 }
