@@ -24,54 +24,59 @@ from isaaclab.utils.dict import print_dict
 ##
 
 urdf_robot = "spotmicroaiean.urdf"
-root_path = "exts/MicroSpot_implementation/assets/URDF"
-usd_path = "exts/MicroSpot_implementation/assets/SpotMicroUSD"
 usd_name = "spotmicroaiean_inercia03.usd"
 
+here = os.path.dirname(os.path.abspath(__file__))
+
 # check valid file path
-urdf_path = "{}/{}".format(root_path, urdf_robot)
+urdf_path = "{}/{}".format(f"{here}/URDF", urdf_robot)
 if not os.path.isabs(urdf_path):
     urdf_path = os.path.abspath(urdf_path)
 if not check_file_path(urdf_path):
     raise ValueError(f"Invalid file path: {urdf_path}")
 # create destination path
-usd_file = "{}/{}".format(usd_path, usd_name)
+usd_file = "{}/{}".format(f"{here}/SpotMicroUSD", usd_name)
 if not os.path.isabs(usd_file):
     usd_file = os.path.abspath(usd_file)
 
-# config of Urdf converter 
-urdf_converter_cfg = UrdfConverterCfg(
-    asset_path=urdf_path,
-    usd_dir=os.path.dirname(usd_file),
-    usd_file_name=os.path.basename(usd_file),
-    fix_base= False,
-    merge_fixed_joints= False,
-    force_usd_conversion=True,
-    joint_drive=UrdfConverterCfg.JointDriveCfg(
-        gains=UrdfConverterCfg.JointDriveCfg.PDGainsCfg(
-            stiffness=625.0,
+if not check_file_path(usd_file):
+    # Create config of Urdf converter 
+    urdf_converter_cfg = UrdfConverterCfg(
+        asset_path=urdf_path,
+        usd_dir=os.path.dirname(usd_file),
+        usd_file_name=os.path.basename(usd_file),
+        fix_base= False,
+        merge_fixed_joints= False,
+        force_usd_conversion=True,
+        joint_drive=UrdfConverterCfg.JointDriveCfg(
+            gains=UrdfConverterCfg.JointDriveCfg.PDGainsCfg(
+                stiffness=1000.0,
+            ),
+            target_type="position",
         ),
-        target_type="position",
-    ),
-)
+    )
+    
+    # Print info
+    print("-" * 80)
+    print("-" * 80)
+    print(f"Input URDF file: {urdf_path}")
+    print("URDF importer config:")
+    print_dict(urdf_converter_cfg.to_dict(), nesting=0)
+    print("-" * 80)
+    print("-" * 80)
+    
+    # Create Urdf converter and import the file
+    urdf_converter = UrdfConverter(urdf_converter_cfg)
+    # print output
+    print("URDF importer output:")
+    print(f"Generated USD file: {urdf_converter.usd_path}")
+    print("-" * 80)
+    print("-" * 80)
 
-# Print info
-print("-" * 80)
-print("-" * 80)
-print(f"Input URDF file: {urdf_path}")
-print("URDF importer config:")
-print_dict(urdf_converter_cfg.to_dict(), nesting=0)
-print("-" * 80)
-print("-" * 80)
-
-# Create Urdf converter and import the file
-urdf_converter = UrdfConverter(urdf_converter_cfg)
-# print output
-print("URDF importer output:")
-print(f"Generated USD file: {urdf_converter.usd_path}")
-print("-" * 80)
-print("-" * 80)
-
+else:
+    print("-" * 80)
+    print(f"USD file already exists in: {usd_file}")
+    print("-" * 80)
 # launch omniverse app
 simulation_app = app_launcher.app
 
@@ -80,7 +85,7 @@ import torch
 
 import isaaclab.sim as sim_utils
 from isaaclab.assets import AssetBaseCfg
-from isaaclab.actuators import DCMotorCfg
+from isaaclab.actuators import DCMotorCfg, ImplicitActuatorCfg
 from isaaclab.assets.articulation import ArticulationCfg
 from isaaclab.scene import InteractiveScene, InteractiveSceneCfg
 
@@ -134,24 +139,21 @@ QUAD_EAN = ArticulationCfg(
     ),
     soft_joint_pos_limit_factor=0.9,
     actuators={
-        "shoulders": DCMotorCfg(
+        "shoulders": ImplicitActuatorCfg(
             joint_names_expr=[".*_shoulder"],
-            effort_limit_sim=2500.0,
-            velocity_limit_sim=120.0,
+            velocity_limit=120.0,
             stiffness=10000.0,
             damping=100.0,
         ),
-        "legs": DCMotorCfg(
+        "legs": ImplicitActuatorCfg(
             joint_names_expr=[".*_leg"],
-            effort_limit_sim=2500.0,
-            velocity_limit_sim=120.0,
+            velocity_limit=120.0,
             stiffness=10000.0,
             damping=100.0,
         ),
-        "foots": DCMotorCfg(
+        "foots": ImplicitActuatorCfg(
             joint_names_expr=[".*_foot"],
-            effort_limit_sim=2500.0,
-            velocity_limit_sim=120.0,
+            velocity_limit=120.0,
             stiffness=10000.0,
             damping=100.0,
         )
@@ -183,7 +185,7 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveSceneCfg):
 
     while simulation_app.is_running():
         # reset
-        if count % 1000 = 0:
+        if count % 1000 == 0:
             # reset counters
             count = 0
             # reset the scene entities to the initial positions offset by the environment origins
@@ -194,16 +196,16 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveSceneCfg):
             scene["spotmicroaiean"].write_root_pose_to_sim(root_spotmicroaiean_state[:, :7])
             scene["spotmicroaiean"].write_root_velocity_to_sim(root_spotmicroaiean_state[:, 7:])
            
-           # copy the default joint states to the sim
-           joint_pos, joint_vel = (
-                   scene["spotmicroaiean"].data.default_joint_pos.clone(),
-                   scene["spotmicroaiean"].data.default_joint_vel.clone()
-           )
-           scene["spotmicroaiean"].write_joint_state_to_sim(joint_pos, joint_vel)
+            # copy the default joint states to the sim
+            joint_pos, joint_vel = (
+                    scene["spotmicroaiean"].data.default_joint_pos.clone(),
+                    scene["spotmicroaiean"].data.default_joint_vel.clone()
+            )
+            scene["spotmicroaiean"].write_joint_state_to_sim(joint_pos, joint_vel)
 
-           # clear internal buffers
-           scene.reset()
-           print("[INFO]: Reseting SpotMicroAI state")
+            # clear internal buffers
+            scene.reset()
+            print("[INFO]: Reseting SpotMicroAI state")
 
         # realize random joint targets after 300 steps
         if count >= 300:

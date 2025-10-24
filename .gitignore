@@ -41,6 +41,7 @@ docker/.container.cfg
 **/wandb/*
 **/.neptune/*
 docker/artifacts/
+source/IsaacLabExtensionSpotMicro/IsaacLabExtensionSpotMicro/tasks/manager_based/isaaclabextensionspotmicro/assets/SpotMicroUSD/
 *.tmp
 
 # Doc Outputs
