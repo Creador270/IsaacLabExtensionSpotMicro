@@ -2,12 +2,12 @@ import os
 import sys
 from isaaclab.utils import configclass
 
-from velocity_env_cfg import LocomotionVelocityRoughEnvCfg
+from .velocity_env_cfg import LocomotionVelocityRoughEnvCfg
 
 ##
 # Pre-defined configs
 ##
-from assets.robot_spot_ean import QUAD_EAN
+from .assets.robot_spot_ean import QUAD_EAN
 
 
 @configclass
